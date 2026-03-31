@@ -2,7 +2,6 @@ import gradio as gr
 from core import run_agent_system  # if no streaming, we’ll simulate
 
 
-# 🧼 Clean code
 def clean_code(code):
     if not code:
         return ""
@@ -15,7 +14,7 @@ def clean_code(code):
     return code.strip()
 
 
-# 🔥 MAIN FUNCTION (SIMULATED STREAMING)
+
 def solve_task_ui(query, history):
     result = run_agent_system(query)
 
@@ -26,7 +25,7 @@ def solve_task_ui(query, history):
 
     history = codes
 
-    # ✅ Mark BEST in dropdown
+   
     dropdown_choices = []
     for i in range(len(codes)):
         label = f"Version {i+1}"
@@ -45,7 +44,7 @@ def solve_task_ui(query, history):
         gr.update(choices=dropdown_choices, value=dropdown_choices[best_index] if best_index != -1 else dropdown_choices[-1]),
         f"Iterations: {iterations}"
     )
-# 🔁 Show selected version
+
 def show_version(selected, history_state):
     if not selected or not history_state:
         return ""
@@ -54,10 +53,10 @@ def show_version(selected, history_state):
     return history_state[index]
 
 
-# 🎨 UI
-with gr.Blocks(title="AI Coding Agent") as demo:
 
-    gr.Markdown("# 🤖 AI Coding Agent")
+with gr.Blocks(title="CodEX: A Coding Agent") as demo:
+
+    gr.Markdown("# 🤖 CodEX: Code Generator")
     gr.Markdown("Live code generation + version tracking + iteration count")
 
     state = gr.State([])
@@ -86,20 +85,19 @@ with gr.Blocks(title="AI Coding Agent") as demo:
         language="python"
     )
 
-    # 🔥 Run agent
     run_btn.click(
         fn=solve_task_ui,
         inputs=[user_input, state],
         outputs=[code_output, state, dropdown, dropdown, iteration_box]
     )
 
-    # 🔁 Switch versions
+
     dropdown.change(
         fn=show_version,
         inputs=[dropdown, state],
         outputs=code_output
     )
 
-# 🚀 Launch
+
 if __name__ == "__main__":
     demo.launch(debug=True)
